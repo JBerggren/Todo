@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using MongoDB.Driver;
 
 namespace Todo.Controllers
 {
@@ -15,25 +10,18 @@ namespace Todo.Controllers
 
 
         private readonly ILogger<TodoController> _logger;
+        private TodoService Service {get;set;}
 
-        public TodoController(ILogger<TodoController> logger)
+        public TodoController(ILogger<TodoController> logger, TodoService todoService)
         {
             _logger = logger;
+            Service = todoService;
         }
 
         [HttpGet]
         public string Get()
         {
-            var mongo = new MongoClient("mongodb://todoadmin:getthingsdone@mongo:27017");
-            var db = mongo.GetDatabase("TodoDb");
-            var items = db.GetCollection<TodoItem>("items");
-            items.InsertOne(new TodoItem(){Title = DateTime.Now.ToString("mm:ss")});
-            return "Number of items " + items.CountDocuments(new FilterDefinitionBuilder<TodoItem>().Empty);
+            return "Number of items " + Service.GetNumberOfTodos();
         }
-    }
-
-    public class TodoItem{
-        public string Title{get;set;}
-        public bool Done {get;set;}
     }
 }
