@@ -1,0 +1,20 @@
+# docker-compose.yml
+version: "3"
+services:
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: todoadmin
+      MONGO_INITDB_ROOT_PASSWORD: getthingsdone
+  web:
+      build: .
+      depends_on:
+      - mongo
+      links:
+      - mongo
+      ports:
+      - 8080:80
+      environment:
+        ASPNETCORE_ENVIRONMENT: Development
+        ASPNETCORE_URLS: "http://*:80"
