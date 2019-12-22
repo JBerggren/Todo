@@ -1,1 +1,7 @@
-<div class="message">${message}</div>
+<h2>Todos</h2>
+<div repeat.for="item of items">
+    ${item.title}
+</div>
+<div class="new-todo">
+    <input type="text" placeholder="New todo..." value.bind="newTodoTitle" keydown.trigger="addTodo($event)"
+</div>

@@ -8,3 +8,8 @@ docker run --rm -p 8080:80 -e ASPNETCORE_ENVIRONMENT=Development -e ASPNETCORE_U
 
 Run a instance of mongodb
 docker run --name mongodb -e MONGO_INITDB_ROOT_USERNAME=todoadmin -e MONGO_INITDB_ROOT_PASSWORD=getthingsdone -d -p 27017:27017 mongo
+
+
+mongodb
+.Net core webapi backend
+Aurelia2 frontend

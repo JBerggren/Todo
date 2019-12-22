@@ -4,23 +4,31 @@ using System.Collections.Generic;
 using Todo.Models;
 using Todo.Settings;
 
-public class TodoService{
-    private MongoClient Client {get;set;}
-    private IMongoDatabase Database {get;set;}
+public class TodoService
+{
+    private MongoClient Client { get; set; }
+    private IMongoDatabase Database { get; set; }
     private const string CollectionName = "Items";
 
-    public TodoService(IMongoDbSettings settings){
+    public TodoService(IMongoDbSettings settings)
+    {
         Client = new MongoClient(settings.ConnectionString);
-        Database =  Client.GetDatabase(settings.DatabaseName);
+        Database = Client.GetDatabase(settings.DatabaseName);
     }
 
-    public long GetNumberOfTodos(){
+    public IList<TodoItem> FindByTitle(string title)
+    {
+        return Database.GetCollection<TodoItem>(CollectionName).Find<TodoItem>(Builders<TodoItem>.Filter.Where(x => x.Title.Contains(title))).ToList();
+    }
+
+    public long GetNumberOfTodos()
+    {
         return Database.GetCollection<TodoItem>(CollectionName).CountDocuments(new FilterDefinitionBuilder<TodoItem>().Empty);
     }
 
-    public void Save(TodoItem item)
+    internal List<TodoItem> GetAll()
     {
-        Database.GetCollection<TodoItem>(CollectionName).InsertOne(item);
+        return Database.GetCollection<TodoItem>(CollectionName).Find(new FilterDefinitionBuilder<TodoItem>().Empty).ToList();
     }
 
     public TodoItem GetById(string id)
@@ -28,8 +36,8 @@ public class TodoService{
         return Database.GetCollection<TodoItem>(CollectionName).Find<TodoItem>(Builders<TodoItem>.Filter.Eq(x => x.Id, id)).FirstOrDefault();
     }
 
-    public IList<TodoItem> FindByTitle(string title)
+    public void Save(TodoItem item)
     {
-        return Database.GetCollection<TodoItem>(CollectionName).Find<TodoItem>(Builders<TodoItem>.Filter.Where(x => x.Title.Contains(title))).ToList();
+        Database.GetCollection<TodoItem>(CollectionName).InsertOne(item);
     }
 }
