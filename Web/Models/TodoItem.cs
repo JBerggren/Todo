@@ -12,6 +12,7 @@ namespace Todo.Models
         [BsonId]
         [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
         public string Id { get; set; }
+
         public string Title { get; set; }
         public bool Done { get; set; }
     }

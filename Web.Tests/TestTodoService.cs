@@ -1,3 +1,4 @@
+using MongoDB.Driver;
 using System;
 using Todo.Settings;
 using Xunit;
@@ -9,8 +10,10 @@ namespace Web.Tests
         TodoService Service;
         const string ConnectionString = "mongodb://todoadmin:getthingsdone@localhost:27017";
         const string Database = "Testing";
+        MongoClient client; 
         public TestTodoService()
         {
+            client  = new MongoClient(ConnectionString);
             Service = new TodoService(new MongoDbSettings() { ConnectionString = ConnectionString, DatabaseName = Database });
         }
 
@@ -40,9 +43,27 @@ namespace Web.Tests
             Assert.Equal(retrievedTodo.Title, todoItem.Title);
         }
 
+        [Fact]
+        public void CanSearchForTitle()
+        {
+            client.DropDatabase(Database);
+           
+            var prefix = "TestTitle";
+            var todoItem = new Todo.Models.TodoItem(prefix + "1");
+            Service.Save(todoItem);
+            todoItem = new Todo.Models.TodoItem(prefix + "2");
+            Service.Save(todoItem);
+            todoItem = new Todo.Models.TodoItem("AAA");
+            Service.Save(todoItem);
+
+            var items = Service.FindByTitle(prefix);
+            Assert.Equal(2, items.Count);
+        }
+
+
+
         public void Dispose()
         {
-            var client = new MongoDB.Driver.MongoClient(ConnectionString);
             client.DropDatabase(Database);
             return;
         }

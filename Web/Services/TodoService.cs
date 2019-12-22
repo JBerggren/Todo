@@ -1,5 +1,6 @@
 using MongoDB.Driver;
 using System;
+using System.Collections.Generic;
 using Todo.Models;
 using Todo.Settings;
 
@@ -25,5 +26,10 @@ public class TodoService{
     public TodoItem GetById(string id)
     {
         return Database.GetCollection<TodoItem>(CollectionName).Find<TodoItem>(Builders<TodoItem>.Filter.Eq(x => x.Id, id)).FirstOrDefault();
+    }
+
+    public IList<TodoItem> FindByTitle(string title)
+    {
+        return Database.GetCollection<TodoItem>(CollectionName).Find<TodoItem>(Builders<TodoItem>.Filter.Where(x => x.Title.Contains(title))).ToList();
     }
 }
