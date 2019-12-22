@@ -14,11 +14,12 @@ namespace Web.Tests
         public TestTodoService()
         {
             client  = new MongoClient(ConnectionString);
+            client.DropDatabase(Database);
             Service = new TodoService(new MongoDbSettings() { ConnectionString = ConnectionString, DatabaseName = Database });
         }
 
         [Fact]
-        public void CreatedTodoGetsId()
+        public void CanAdd()
         {
             var todoItem = new Todo.Models.TodoItem("Testing");
             Service.Save(todoItem);
@@ -26,14 +27,14 @@ namespace Web.Tests
         }
 
         [Fact]
-        public void TodosAreActuallyStored()
+        public void AssureTodosAreStored()
         {
-            CreatedTodoGetsId();
+            CanAdd();
             Assert.NotEqual(0, Service.GetNumberOfTodos());
         }
 
         [Fact]
-        public void CanRetrieveTodoById()
+        public void CanRetrieveById()
         {
             var title = "TestID";
             var todoItem = new Todo.Models.TodoItem(title);
@@ -44,7 +45,7 @@ namespace Web.Tests
         }
 
         [Fact]
-        public void CanSearchForTitle()
+        public void CanSearchByTitle()
         {
             client.DropDatabase(Database);
            
