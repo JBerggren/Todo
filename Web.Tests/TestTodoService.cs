@@ -10,10 +10,10 @@ namespace Web.Tests
         TodoService Service;
         const string ConnectionString = "mongodb://todoadmin:getthingsdone@localhost:27017";
         const string Database = "Testing";
-        MongoClient client; 
+        MongoClient client;
         public TestTodoService()
         {
-            client  = new MongoClient(ConnectionString);
+            client = new MongoClient(ConnectionString);
             client.DropDatabase(Database);
             Service = new TodoService(new MongoDbSettings() { ConnectionString = ConnectionString, DatabaseName = Database });
         }
@@ -48,7 +48,7 @@ namespace Web.Tests
         public void CanSearchByTitle()
         {
             client.DropDatabase(Database);
-           
+
             var prefix = "TestTitle";
             var todoItem = new Todo.Models.TodoItem(prefix + "1");
             Service.Save(todoItem);
@@ -61,6 +61,16 @@ namespace Web.Tests
             Assert.Equal(2, items.Count);
         }
 
+        [Fact]
+        public void CanDeleteById()
+        {
+            var todoItem = new Todo.Models.TodoItem("TodoToDelete");
+            Service.Save(todoItem);
+            var numberOfItems = Service.GetNumberOfTodos();
+            Assert.True(Service.DeleteById(todoItem.Id));
+            var newNumberOfItems =  Service.GetNumberOfTodos();
+            Assert.Equal(numberOfItems-1,newNumberOfItems);
+        }
 
 
         public void Dispose()

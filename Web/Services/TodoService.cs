@@ -16,6 +16,11 @@ public class TodoService
         Database = Client.GetDatabase(settings.DatabaseName);
     }
 
+    public bool DeleteById(string id){
+        var result = Database.GetCollection<TodoItem>(CollectionName).DeleteOne(Builders<TodoItem>.Filter.Where(x=>x.Id == id));
+        return result.DeletedCount == 1;
+    }
+
     public IList<TodoItem> FindByTitle(string title)
     {
         return Database.GetCollection<TodoItem>(CollectionName).Find<TodoItem>(Builders<TodoItem>.Filter.Where(x => x.Title.Contains(title))).ToList();
