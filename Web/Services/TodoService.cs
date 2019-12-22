@@ -13,4 +13,9 @@ public class TodoService{
     public long GetNumberOfTodos(){
         return Database.GetCollection<TodoItem>("Items").CountDocuments(new FilterDefinitionBuilder<TodoItem>().Empty);
     }
+
+    public void Save(TodoItem item)
+    {
+        Database.GetCollection<TodoItem>("Items").InsertOne(item);
+    }
 }
