@@ -29,6 +29,17 @@ namespace Web.Tests
             Assert.NotEqual(0, Service.GetNumberOfTodos());
         }
 
+        [Fact]
+        public void CanRetrieveTodoById()
+        {
+            var title = "TestID";
+            var todoItem = new Todo.Models.TodoItem(title);
+            Service.Save(todoItem);
+            var retrievedTodo = Service.GetById(todoItem.Id);
+            Assert.NotNull(retrievedTodo);
+            Assert.Equal(retrievedTodo.Title, todoItem.Title);
+        }
+
         public void Dispose()
         {
             var client = new MongoDB.Driver.MongoClient(ConnectionString);
