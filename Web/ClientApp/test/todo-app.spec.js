@@ -1,5 +1,5 @@
 import Aurelia, { CustomElement } from 'aurelia';
-import { MyApp } from '../src/my-app';
+import { TodoApp } from '../src/todo-app';
 
 function createAu(template, ...deps) {
   const wrapper = CustomElement.define({name: 'wrapper', template});
@@ -14,15 +14,15 @@ function cleanup() {
   }
 }
 
-describe('my-app', () => {
+describe('todo-app', () => {
   afterEach(() => {
     cleanup();
   });
 
   it('should render message', async () => {
-    const au = createAu('<my-app></my-app>', MyApp);
+    const au = createAu('<todo-app></todo-app>', TodoApp);
     await au.start().wait();
-    const node = document.querySelector('my-app');
+    const node = document.querySelector('todo-app');
     const text =  node.textContent;
     expect(text.trim()).toBe('Hello World!');
     await au.stop().wait();

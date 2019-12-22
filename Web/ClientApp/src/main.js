@@ -1,4 +1,4 @@
 import Aurelia from 'aurelia';
-import { MyApp } from './my-app';
+import { TodoApp } from './todo-app';
 
-Aurelia.app(MyApp).start();
+Aurelia.app(TodoApp).start();

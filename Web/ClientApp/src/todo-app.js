@@ -1,3 +1,3 @@
-export class MyApp {
+export class TodoApp {
   message = 'Hello World!';
 }
