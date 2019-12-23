@@ -13,7 +13,7 @@ namespace Todo.Controllers
 
 
         private readonly ILogger<TodoController> _logger;
-        private TodoService Service {get;set;}
+        private TodoService Service { get; set; }
 
         public TodoController(ILogger<TodoController> logger, TodoService todoService)
         {
@@ -24,25 +24,49 @@ namespace Todo.Controllers
         [HttpGet]
         public TodoListResponse Get()
         {
-            return new TodoListResponse { Items = Service.GetAll()};
+            return new TodoListResponse { Items = Service.GetAll() };
+        }
+
+        [HttpGet("{id}", Name = "GetTodoItem")]
+        public TodoItem GetItem(string id)
+        {
+            return Service.GetById(id);
         }
 
         [HttpPost]
-        public TodoItem Create(TodoCreateRequest param){
-            if(string.IsNullOrWhiteSpace(param.Title)){
+        public CreatedAtRouteResult Create(TodoCreateRequest param)
+        {
+            if (string.IsNullOrWhiteSpace(param.Title))
+            {
                 throw new ArgumentException("Title empty");
             }
             var item = new TodoItem(param.Title);
             Service.Save(item);
-            return item;
+            return CreatedAtRoute("GetTodoItem", new { id = item.Id }, item);
+        }
+
+        [HttpPost("{id}")]
+        public TodoItem Update(string id, TodoItem item)
+        {
+            if (string.IsNullOrWhiteSpace(id)){
+                throw new ArgumentException("Wrong id"); 
+            }
+            if (string.IsNullOrWhiteSpace(item.Title))
+            {
+                throw new ArgumentException("Title empty");
+            }
+            var newItem = Service.Update(item);
+            return newItem;
         }
     }
 
-    public class TodoCreateRequest{
-        public string Title{get;set;}
+    public class TodoCreateRequest
+    {
+        public string Title { get; set; }
     }
 
-    public class TodoListResponse{
-        public IList<TodoItem> Items{get;set;}
+    public class TodoListResponse
+    {
+        public IList<TodoItem> Items { get; set; }
     }
 }

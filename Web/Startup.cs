@@ -25,10 +25,20 @@ namespace Todo
             services.AddSingleton<TodoService>();
             services.AddControllers();
 
-             services.AddSpaStaticFiles(configuration =>
+            services.AddCors(options =>
             {
-                configuration.RootPath = "ClientApp/dist";
+                options.AddPolicy("CorsPolicy",policy =>
+                {
+                    policy.AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod();
+                });
             });
+
+            services.AddSpaStaticFiles(configuration =>
+           {
+               configuration.RootPath = "ClientApp/dist";
+           });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -41,12 +51,15 @@ namespace Todo
 
             //app.UseHttpsRedirection();
 
+            app.UseCors("CorsPolicy"); 
+
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
             app.UseRouting();
 
             app.UseAuthorization();
+
 
             app.UseEndpoints(endpoints =>
             {

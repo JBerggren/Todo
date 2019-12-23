@@ -1,0 +1,6 @@
+<template>
+    <label>
+        <input type="checkbox" checked.bind="item.completed" change.delegate="changeCompleted()">
+        <span>${item.title}</span> <span if.bind="item.completionTime"> - ${completionTime}</span>
+    </label>
+</template>

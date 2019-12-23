@@ -1,6 +1,9 @@
-
+import { inject } from 'aurelia';
+import { TodoService } from 'todo-service';
+@inject(TodoService) 
 export class TodoApp {
-  constructor() {
+  constructor(todoService) {
+    this.service = todoService;
     this.loadTodos();
   }
 
@@ -9,15 +12,10 @@ export class TodoApp {
     if(!isEnter){
       return true;
     }
+
     var newTodo = {title: this.newTodoTitle};
-    fetch("/todo",{
-      method:"POST",
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(newTodo)
-    }).then(x=>{
+
+    this.service.createNew(newTodo).then(x=>{
       this.newTodoTitle = "";
       this.loadTodos();
     });
@@ -25,9 +23,7 @@ export class TodoApp {
   }
 
   loadTodos(){
-    fetch("/todo").then(x => {
-      return x.json();
-    }).then(x=> {
+    this.service.getItems().then(x=> {
       this.items = x.items;
     });
   }

@@ -1,7 +1,10 @@
+<<require from="todo-item"></require>
 <h2>Todos</h2>
-<div repeat.for="item of items">
-    ${item.title}
-</div>
+<template repeat.for="item of items">
+    <todo-item item.bind="item">
+</template>
+
+</todo-item>
 <div class="new-todo">
     <input type="text" placeholder="New todo..." value.bind="newTodoTitle" keydown.trigger="addTodo($event)"
 </div>

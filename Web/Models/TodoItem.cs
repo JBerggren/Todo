@@ -1,3 +1,4 @@
+using System;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace Todo.Models
@@ -14,6 +15,8 @@ namespace Todo.Models
         public string Id { get; set; }
 
         public string Title { get; set; }
-        public bool Done { get; set; }
-    }
+        public string Description {get;set;}
+        public bool Completed { get; set; }
+        public DateTime? CompletionTime {get;set;}
+    } 
 }
